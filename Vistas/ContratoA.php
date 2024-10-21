@@ -17,6 +17,7 @@
 </head>
 
 <body>
+   
     <!-- Sidebar -->
      <?php include "./side/side_A.php"?>
     <div class="container">

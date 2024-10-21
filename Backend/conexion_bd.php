@@ -1,18 +1,16 @@
 <?php
-// Configuración de bd en localHost
+// Configuración de la conexión a la base de datos usando PDO
 $db_host = 'localhost';
+$db_name = 'corposystemas_bd';
 $db_username = 'root';
-$db_password = ''; // Cambia por una contraseña si la tienes configurada
-$db_name = 'corposystemas_bd'; // Asegúrate de que este nombre sea correcto y existe
+$db_password = ''; // Cambia si tienes una contraseña configurada
 
-// Conexión a la base de datos
-$conexion = new mysqli($db_host, $db_username, $db_password, $db_name);
-
-// Manejo de errores
-if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
-} else {
-    $conexion->set_charset("utf8"); // Asegúrate de que la conexión sea exitosa antes de intentar esto
+try {
+    // Crear la conexión usando PDO
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_username, $db_password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->exec("SET NAMES utf8"); // Asegura la codificación UTF-8
+} catch (PDOException $e) {
+    die("Error de conexión: " . $e->getMessage());
 }
-
 ?>

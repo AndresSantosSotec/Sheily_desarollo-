@@ -1,43 +1,46 @@
 <?php
-// Inicializa la sesión y llama a la conexión
 session_start();
-include 'conexion_bd.php'; // Incluir conexión a la base de datos
+include 'conexion_bd.php'; // Incluye la conexión PDO
 
-// Recibir valores del formulario
-$correo = mysqli_real_escape_string($conexion, $_POST['correo']);
-$contrasena = mysqli_real_escape_string($conexion, $_POST['contrasena']);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $correo = $_POST['correo'];
+    $contrasena = $_POST['contrasena'];
 
-// Consulta para obtener el hash de la contraseña almacenada en la base de datos
-$validar_login = mysqli_query($conexion, "SELECT * FROM usuarios WHERE correo = '$correo'");
+    try {
+        // Preparar y ejecutar la consulta
+        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE correo = :correo");
+        $stmt->bindParam(':correo', $correo);
+        $stmt->execute();
 
-if (mysqli_num_rows($validar_login) > 0) {
-    $usuario = mysqli_fetch_assoc($validar_login);
+        if ($stmt->rowCount() > 0) {
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Verificar si la contraseña ingresada coincide con el hash almacenado
-    if (password_verify($contrasena, $usuario['password'])) {
-        // Almacenar datos en la sesión
-        $_SESSION['id_usuario'] = $usuario['id'];
-        $_SESSION['correo'] = $usuario['correo'];
-        $_SESSION['nombre'] = $usuario['nombre'];
-        $_SESSION['usuario'] = $usuario['usuario'];
+            // Verificar la contraseña
+            if (password_verify($contrasena, $usuario['password'])) {
+                $_SESSION['id_usuario'] = $usuario['id'];
+                $_SESSION['correo'] = $usuario['correo'];
+                $_SESSION['nombre'] = $usuario['nombre'];
+                $_SESSION['usuario'] = $usuario['usuario'];
 
-        // Redirigir al usuario al Dashboard
-        header("location: ../Vistas/Dashboard.php");
-        exit; // Detener la ejecución después de la redirección
-    } else {
-        echo '
-            <script>
-                alert("Contraseña incorrecta. Inténtalo de nuevo.");
-                window.location = "../index.php";
-            </script>';
-        exit;
+                // Redirigir al dashboard
+                header("location: ../Vistas/Dashboard.php");
+                exit;
+            } else {
+                echo '
+                    <script>
+                        alert("Contraseña incorrecta. Inténtalo de nuevo.");
+                        window.location = "../index.php";
+                    </script>';
+            }
+        } else {
+            echo '
+                <script>
+                    alert("El correo no está registrado.");
+                    window.location = "../index.php";
+                </script>';
+        }
+    } catch (PDOException $e) {
+        die("Error en la consulta: " . $e->getMessage());
     }
-} else {
-    echo '
-        <script>
-            alert("El correo no está registrado.");
-            window.location = "../index.php";
-        </script>';
-    exit;
 }
 ?>
