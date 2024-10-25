@@ -111,6 +111,14 @@
                     <label for="fechaValidez" class="form-label">Fecha de Validez:</label>
                     <input type="date" class="form-control" id="fechaValidez" name="fechaValidez" required>
                 </div>
+                <div class="col-md-3 mb-3">
+                    <label for="rango_documentos" class="form-label">Rango del Contratante:</label>
+                    <input type="text" class="form-control" id="rango_documentos" name="rango_documentos" placeholder="Ingresa el rango del contratante" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="direccionContratante" class="form-label">Dirección del Contratante:</label>
+                    <input type="text" class="form-control" id="direccionContratante" name="direccionContratante" placeholder="Ingresa la dirección del contratante" required>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary w-100 mt-4">Crear Contrato</button>

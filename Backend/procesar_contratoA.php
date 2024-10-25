@@ -1,6 +1,6 @@
 <?php
 // Incluir la configuración de la conexión a la base de datos
-include "conexion_bd.php"; 
+include "conexion_bd.php";
 
 // Asegurarse de que $pdo esté disponible en este archivo
 global $pdo;
@@ -34,26 +34,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cobroUnico = $_POST['cobroUnico'];
     $fechaValidez = $_POST['fechaValidez'];
 
+    $rango_documentos = $_POST['rango_documentos'];
+    $direccionContratante = $_POST['direccionContratante'];
+
+
     // Consulta SQL de inserción
-    $sql = "INSERT INTO contratos_A (
-                nombre_emisor, edad_emisor, dpi_emisor,
-                nombre_receptor, edad_receptor, domicilio_receptor, dpi_receptor, 
-                departamento_emision, municipio_emision, nombre_contratante,
-                fecha_patente, numero_inscripcion, folio_registro, libro_registro,
-                actividad_economica, nit, tarifa_mensual,
-                cobro_unico, fecha_validez
-            ) VALUES (
-                :nombreEmisor, :edadEmisor, :dpiEmisor,
-                :nombreReceptor, :edadReceptor, :domicilioReceptor, :dpiReceptor,
-                :departamentoEmision, :municipioEmision, :nombreContratante,
-                :fechaPatente, :numeroInscripcion, :folioRegistro, :libroRegistro,
-                :actividadEconomica, :nit, :tarifaMensual,
-                :cobroUnico, :fechaValidez
-            )";
+    $sql = "INSERT INTO contratos_a (
+        nombre_emisor, edad_emisor, dpi_emisor,
+        nombre_receptor, edad_receptor, domicilio_receptor, dpi_receptor,
+        departamento_emision, municipio_emision, nombre_contratante, rango_documentos, direccion_contratante,
+        fecha_patente, numero_inscripcion, folio_registro, libro_registro,
+        actividad_economica, nit, tarifa_mensual,
+        cobro_unico, fecha_validez
+    ) VALUES (
+        :nombreEmisor, :edadEmisor, :dpiEmisor,
+        :nombreReceptor, :edadReceptor, :domicilioReceptor, :dpiReceptor,
+        :departamentoEmision, :municipioEmision, :nombreContratante, :rango_documentos, :direccionContratante,
+        :fechaPatente, :numeroInscripcion, :folioRegistro, :libroRegistro,
+        :actividadEconomica, :nit, :tarifaMensual,
+        :cobroUnico, :fechaValidez
+    )";
+    
 
     $stmt = $pdo->prepare($sql);
 
-    // Asignar los valores a los parámetros
     $stmt->bindParam(':nombreEmisor', $nombreEmisor);
     $stmt->bindParam(':edadEmisor', $edadEmisor);
     $stmt->bindParam(':dpiEmisor', $dpiEmisor);
@@ -64,6 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':departamentoEmision', $departamentoEmision);
     $stmt->bindParam(':municipioEmision', $municipioEmision);
     $stmt->bindParam(':nombreContratante', $nombreContratante);
+    $stmt->bindParam(':rango_documentos', $rango_documentos);
+    $stmt->bindParam(':direccionContratante', $direccionContratante);
     $stmt->bindParam(':fechaPatente', $fechaPatente);
     $stmt->bindParam(':numeroInscripcion', $numeroInscripcion);
     $stmt->bindParam(':folioRegistro', $folioRegistro);
@@ -73,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':tarifaMensual', $tarifaMensual);
     $stmt->bindParam(':cobroUnico', $cobroUnico);
     $stmt->bindParam(':fechaValidez', $fechaValidez);
+    
 
     // Ejecutar la consulta y preparar el mensaje de alerta
     if ($stmt->execute()) {
@@ -96,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- HTML para mostrar la alerta de Bootstrap -->
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,20 +111,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <div class="container mt-5">
-        <?php 
+        <?php
         // Mostrar el mensaje de alerta si está definido
         if (!empty($alertMessage)) {
             echo $alertMessage;
             echo "<script>setTimeout(() => { window.location.href = '../Vistas/ContratoA.php'; }, 3000);</script>";
         }
         ?>
-
         <!-- Aquí va el resto de tu formulario -->
     </div>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

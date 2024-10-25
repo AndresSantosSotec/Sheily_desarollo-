@@ -155,9 +155,8 @@
                             <label for="fechaVigencia" class="form-label">Fecha de Vigencia:</label>
                             <input type="date" class="form-control" id="fechaVigencia" name="fechaVigencia" required>
                         </div>
+
                     </div>
-
-
                     <button type="submit" class="btn btn-primary w-100 mt-4">Crear Contrato</button>
                 </form>
             </div>
