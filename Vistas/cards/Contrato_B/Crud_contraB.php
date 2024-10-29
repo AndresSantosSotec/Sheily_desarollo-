@@ -57,9 +57,10 @@ try {
                             <td>' . $row['fecha_inicio'] . '</td>
                             <td>' . $row['fecha_fin'] . '</td>
                             <td class="d-flex justify-content-between">
-                                <button class="btn btn-sm btn-info me-1" title="Descargar">
-                                    <i class="fas fa-download"></i>
-                                </button>
+                                    <a href="../Docs/Documentos/repoB.php?id_contrato=' . $row['id_contrato'] . '" 
+                                       class="btn btn-sm btn-info" title="Descargar" target="_blank">
+                                        <i class="fas fa-download"></i>
+                                    </a>
                                 <button class="btn btn-sm btn-warning me-1" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>

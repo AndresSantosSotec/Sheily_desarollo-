@@ -5,6 +5,8 @@ $db_name = 'corposystemas_bd';
 $db_username = 'root';
 $db_password = ''; // Cambia si tienes contraseña configurada
 
+
+
 try {
     // Crear la conexión usando PDO
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_username, $db_password);
@@ -55,18 +57,19 @@ try {
                             <td>' . $row['rango_documentos'] . '</td>
                             <td>' . $row['fecha_validez'] . '</td>
                             <td>' . $row['fecha_creacion'] . '</td>
-                            <td>
-                                <button class="btn btn-sm btn-info" title="Descargar">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                                <button class="btn btn-sm btn-warning" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger" 
-                                    onclick="eliminarContrato(' . $row['id_contrato'] . ', \'A\')">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </td>
+                                <td>
+                                    <a href="../Docs/Documentos/repoA.php?id_contrato=' . $row['id_contrato'] . '" 
+                                       class="btn btn-sm btn-info" title="Descargar" target="_blank">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    <button class="btn btn-sm btn-warning" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" 
+                                        onclick="eliminarContrato(' . $row['id_contrato'] . ', \'A\')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
                         </tr>';
                     }
                 } else {
@@ -107,7 +110,10 @@ try {
                 $.ajax({
                     url: '../Backend/eliminar_contrato.php',
                     type: 'POST',
-                    data: { id: id, tipo: tipo },
+                    data: {
+                        id: id,
+                        tipo: tipo
+                    },
                     success: function(response) {
                         Swal.fire(
                             'Eliminado',

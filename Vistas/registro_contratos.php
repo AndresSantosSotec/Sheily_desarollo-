@@ -25,7 +25,17 @@
         </header>
 
         <div id="content-area" class="mt-4">
-            <!-- Aquí se cargarán las cards dinámicamente -->
+            <div class="alert alert-info" role="alert">
+                <h5 class="alert-heading">Instrucciones para seleccionar y gestionar contratos</h5>
+                <p>Sigue los pasos a continuación para ver, editar o descargar un contrato:</p>
+                <ol>
+                    <li>Busca el contrato que deseas administrar en la tabla mostrada a continuación.</li>
+                    <li>Puedes utilizar las opciones de <strong>Descargar</strong> <i class="fas fa-download"></i>, <strong>Editar</strong> <i class="fas fa-edit"></i>, o <strong>Eliminar</strong> <i class="fas fa-trash-alt"></i> según corresponda.</li>
+                    <li>Para eliminar un contrato, asegúrate de que deseas proceder, ya que esta acción no se puede deshacer.</li>
+                </ol>
+                <hr>
+                <p class="mb-0">Si necesitas ayuda adicional, contacta al soporte técnico.</p>
+            </div>
         </div>
     </div>
 
