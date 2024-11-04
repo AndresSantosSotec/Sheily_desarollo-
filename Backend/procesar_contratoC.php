@@ -10,6 +10,7 @@ $alertMessage = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obtener los datos del formulario
+    $edadCorpo = $_POST['edadCorpo'];
     $nombreEmisor = $_POST['nombreEmisor'];
     $edadEmisor = $_POST['edadEmisor'];
     $dpiEmisor = $_POST['dpiEmisor'];
@@ -40,33 +41,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fechaVigencia = $_POST['fechaVigencia'];
 
     // Consulta SQL de inserción
+    // Consulta SQL de inserción
     $sql = "INSERT INTO contrato_c (
-                nombre_emisor, edad_emisor, dpi_emisor, 
-                departamento_emision_emisor, municipio_emision_emisor, 
-                representante_emisor, entidad_emisor, acredita_emisor, 
-                notario_emisor, registro_mercantil_emisor, folio_emisor, libro_emisor, 
-                nombre_distribuidor, edad_distribuidor, dpi_distribuidor, 
-                departamento_emision_distribuidor, municipio_emision_distribuidor, 
-                representante_distribuidor, entidad_distribuidor, acredita_distribuidor, 
-                notario_distribuidor, registro_mercantil_distribuidor, folio_distribuidor, 
-                libro_distribuidor, actividad_economica, nit_distribuidor, 
-                fecha_vigencia
-            ) VALUES (
-                :nombreEmisor, :edadEmisor, :dpiEmisor, 
-                :departamentoEmisionEmisor, :municipioEmisionEmisor, 
-                :representanteEmisor, :entidadEmisor, :acreditaEmisor, 
-                :notarioEmisor, :registroMercantilEmisor, :folioEmisor, :libroEmisor, 
-                :nombreDistribuidor, :edadDistribuidor, :dpiDistribuidor, 
-                :departamentoEmisionDistribuidor, :municipioEmisionDistribuidor, 
-                :representanteDistribuidor, :entidadDistribuidor, :acreditaDistribuidor, 
-                :notarioDistribuidor, :registroMercantilDistribuidor, :folioDistribuidor, 
-                :libroDistribuidor, :actividadEconomica, :nitDistribuidor, 
-                :fechaVigencia
-            )";
+    edad_corpo, nombre_emisor, edad_emisor, dpi_emisor, 
+    departamento_emision_emisor, municipio_emision_emisor, 
+    representante_emisor, entidad_emisor, acredita_emisor, 
+    notario_emisor, registro_mercantil_emisor, folio_emisor, libro_emisor, 
+    nombre_distribuidor, edad_distribuidor, dpi_distribuidor, 
+    departamento_emision_distribuidor, municipio_emision_distribuidor, 
+    representante_distribuidor, entidad_distribuidor, acredita_distribuidor, 
+    notario_distribuidor, registro_mercantil_distribuidor, folio_distribuidor, 
+    libro_distribuidor, actividad_economica, nit_distribuidor, 
+    fecha_vigencia
+) VALUES (
+    :edadCorpo, :nombreEmisor, :edadEmisor, :dpiEmisor, 
+    :departamentoEmisionEmisor, :municipioEmisionEmisor, 
+    :representanteEmisor, :entidadEmisor, :acreditaEmisor, 
+    :notarioEmisor, :registroMercantilEmisor, :folioEmisor, :libroEmisor, 
+    :nombreDistribuidor, :edadDistribuidor, :dpiDistribuidor, 
+    :departamentoEmisionDistribuidor, :municipioEmisionDistribuidor, 
+    :representanteDistribuidor, :entidadDistribuidor, :acreditaDistribuidor, 
+    :notarioDistribuidor, :registroMercantilDistribuidor, :folioDistribuidor, 
+    :libroDistribuidor, :actividadEconomica, :nitDistribuidor, 
+    :fechaVigencia
+)";
+
 
     $stmt = $pdo->prepare($sql);
 
     // Asignar los valores a los parámetros
+    $stmt->bindParam(':edadCorpo', $edadCorpo);
     $stmt->bindParam(':nombreEmisor', $nombreEmisor);
     $stmt->bindParam(':edadEmisor', $edadEmisor);
     $stmt->bindParam(':dpiEmisor', $dpiEmisor);

@@ -4,58 +4,44 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Inicializa el WebDriver (asegúrate de que ChromeDriver esté en tu PATH)
+# Inicializa el WebDriver
 driver = webdriver.Chrome()
 
 # URL de la aplicación web
 url = "http://localhost/proyectos%204/Sheily/login_register.php"
 
 try:
-    # Accede a la aplicación y maximiza la ventana
+    # Acceder a la aplicación
     driver.get(url)
     driver.maximize_window()
-    time.sleep(3)  # Espera para cargar completamente la página
+    time.sleep(2)
 
+    # Esperar que el botón de inicio de sesión sea clickeable
     def esperar_clickable(by, identifier, timeout=15):
-        """Espera hasta que el elemento sea clickeable."""
-        return WebDriverWait(driver, timeout).until(
-            EC.element_to_be_clickable((by, identifier))
-        )
+        return WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((by, identifier)))
 
-    # Iniciar sesión con las credenciales proporcionadas
+    # Inicia sesión con las credenciales
     correo = "sheilyGonzalezAdmin@gmail.com"
     contrasena = "Sheily1995@"
-
+    
     esperar_clickable(By.ID, 'btn__iniciar-sesion').click()
-    time.sleep(1.5)
-
+    time.sleep(1)
     driver.find_element(By.ID, "email").send_keys(correo)
-    time.sleep(1.5)
     driver.find_element(By.ID, "password").send_keys(contrasena)
-    time.sleep(2)
-
     esperar_clickable(By.CSS_SELECTOR, "button.btn-primary").click()
-    time.sleep(3)
-
-    # Verificar si el login fue exitoso
-    if "Dashboard - Gestión de Contratos" in driver.page_source:
-        print("Inicio de sesión exitoso.")
-    else:
-        print("Error en el inicio de sesión.")
-        driver.quit()
-        exit()
-
-    # Acceder al contrato de servicio a terceros
-    time.sleep(2)
-    esperar_clickable(By.CSS_SELECTOR, "div.card").click()
+    
     time.sleep(2)
 
-    # Completar formulario del contrato con pausas
-    contrato_data = {
-        "nombreEmisor": "Juan Pérez",
+    # Acceder al formulario de Contrato A
+    esperar_clickable(By.CSS_SELECTOR, "div.card[onclick*='ContratoA']").click()
+    time.sleep(2)
+
+    # Llenar los campos del formulario de Contrato A
+    contrato_a = {
+        "nombreEmisor": "Carlos López",
         "edadEmisor": "40",
         "dpiEmisor": "1234567890101",
-        "nombreReceptor": "Carlos López",
+        "nombreReceptor": "Juan Pérez",
         "edadReceptor": "35",
         "dpiReceptor": "9876543210102",
         "domicilioReceptor": "Ciudad de Guatemala",
@@ -65,26 +51,22 @@ try:
         "fechaPatente": "10-01-2023",
         "numeroInscripcion": "123456",
         "folioRegistro": "45",
-        "libroRegistro": "Libro A",
+        "libroRegistro": "25",
         "actividadEconomica": "Consultoría",
         "nit": "12345678-9",
         "tarifaMensual": "500",
         "cobroUnico": "1000",
-        "fechaValidez": "10-10-2024",
-        "rango_documentos": "A001-A100",
+        "fechaValidez": "10-01-2024",
+        "rango_documentos": "200",
         "direccionContratante": "Avenida Central 5-10"
     }
 
-    for campo, valor in contrato_data.items():
+    for campo, valor in contrato_a.items():
         driver.find_element(By.ID, campo).send_keys(valor)
-        time.sleep(1)  # Pausa entre cada entrada
+        time.sleep(1)
 
-    # Enviar el formulario del contrato
+    # Enviar el formulario
     esperar_clickable(By.CSS_SELECTOR, "button.btn-primary").click()
-    time.sleep(3)
-    print("Contrato registrado exitosamente.")
-
+    print("Contrato A creado exitosamente.")
 finally:
-    # Esperar 5 segundos antes de cerrar el navegador
-    time.sleep(5)
     driver.quit()

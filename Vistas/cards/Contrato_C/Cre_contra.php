@@ -19,6 +19,11 @@
                 <form method="POST" action="../Backend/procesar_contratoC.php">
                     <!-- Datos del Emisor -->
                     <h4 class="mb-3">Datos del Emisor</h4>
+                    <div class="col-md-3 mb-3">
+                            <label for="edadCorpo" class="form-label">Edad:</label>
+                            <input type="number" class="form-control" id="edadCorpo" name="edadCorpo" required>
+                        </div>
+                    <h4 class="mb-3">Datos del Emisor</h4>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="nombreEmisor" class="form-label">Nombre:</label>

@@ -32,6 +32,7 @@ class PDF extends FPDF
         $this->SetFont('Times', '', 10);
         $this->SetTextColor(0, 0, 0);
         $this->MultiCell(0, 8, utf8_decode($content), 0, 'J');
+
         $this->Ln(8);
     }
 }
@@ -84,11 +85,11 @@ if (isset($_GET['id_contrato']) && is_numeric($_GET['id_contrato'])) {
 
                 b) $nombre_distribuidor, de $edad_distribuidor años, domiciliado en $domicilio_distribuidor, quien se identifica con Documento Personal de Identificación (DPI) con Código Único de Identificación (CUI) " . num2letrasDPI($data['dpi_distribuidor']) . " ({$data['dpi_distribuidor']}) extendido por el Registro Nacional de las Personas de la República de Guatemala, en el municipio de $municipio, del departamento de $departamento, quien comparece en su calidad de PROPIETARIO O REPRESENTANTE LEGAL de la entidad $entidad, (en adelante indistintamente denominado como 'EL CONTRATANTE'), calidad que acredita con patente de comercio o acta notarial de nombramiento autorizada en esta ciudad el día $dia_actual del mes de $mes_actual del año $año_actual por el notario $notario, el cual se encuentra inscrito en el Registro Mercantil General de la República de Guatemala, bajo el número de registro " . num2letras($data['registro_mercantil']) . " ({$data['registro_mercantil']}), folio " . num2letras($data['folio']) . " ({$data['folio']}), libro " . num2letras($data['libro']) . " ({$data['libro']}) de Auxiliares de Comercio.
 
-                 En conjunto y para los efectos de este contrato conocidos ambos como 'LAS PARTES'.
-                Hemos convenido celebrar un CONTRATO DE PRESTACIÓN DE SERVICIOS DE EMISIÓN, TRANSMISIÓN, 
-                CERTIFICACIÓN Y CONSERVACIÓN DE DOCUMENTOS TRIBUTARIOS ELECTRÓNICOS. Con base en las 
-                siguientes cláusulas:";
-        // Sección Primera y Segunda del contrato
+                    En conjunto y para los efectos de este contrato conocidos ambos como 'LAS PARTES'.
+                    Hemos convenido celebrar un CONTRATO DE PRESTACIÓN DE SERVICIOS DE EMISIÓN, TRANSMISIÓN, 
+                    CERTIFICACIÓN Y CONSERVACIÓN DE DOCUMENTOS TRIBUTARIOS ELECTRÓNICOS. Con base en las 
+                    siguientes cláusulas:";
+            // Sección Primera y Segunda del contrato
         $seccionPrimera = "PRIMERA: El representante legal de la entidad CORPOSISTEMAS, SOCIEDAD ANONIMA, declara:
 a) Que su representada es una entidad mercantil organizada, autorizada y reconocida de conformidad con las leyes de la República de Guatemala, cuya actividad, entre otras, consiste en la prestación de servicios de transformación, firmado electrónico, resguardo y consulta de documentos tributarios electrónicos de conformidad con la normativa legal vigente en este país.
 ";
