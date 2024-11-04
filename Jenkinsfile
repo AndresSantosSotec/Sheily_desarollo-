@@ -4,7 +4,7 @@ pipeline {
     environment {
         DB_HOST = 'localhost'
         DB_USER = 'root'
-        DB_PASSWORD = ''
+        DB_PASSWORD = ''  // Agrega la contraseña si es necesaria
         DB_NAME = 'corposystemas_bd'
     }
 
@@ -12,7 +12,7 @@ pipeline {
         stage('Clonar repositorio') {
             steps {
                 echo 'Clonando repositorio desde GitHub...'
-                git branch: 'main', url: 'https://github.com/AndresSantosSotec/Sheily_desarollo-.git'
+                git 'https://github.com/AndresSantosSotec/Sheily_desarollo-.git'
             }
         }
 
@@ -21,17 +21,17 @@ pipeline {
                 echo 'Instalando Apache y dependencias PHP...'
                 sh '''
                 # Instalar Apache si no está instalado
-                 apt-get update
-                 apt-get install -y apache2
+                sudo apt-get update
+                sudo apt-get install -y apache2
 
                 # Instalar PHP y módulos necesarios
-                 apt-get install -y php libapache2-mod-php php-mysql
+                sudo apt-get install -y php libapache2-mod-php php-mysql
 
                 # Asegurarse de que Composer esté instalado
-                 apt-get install -y composer
+                sudo apt-get install -y composer
 
                 # Reiniciar Apache para asegurarse de que todo esté configurado correctamente
-                 service apache2 restart
+                sudo service apache2 restart
                 '''
             }
         }
@@ -39,6 +39,7 @@ pipeline {
         stage('Instalar dependencias del proyecto') {
             steps {
                 echo 'Instalando dependencias del proyecto PHP...'
+                // Instalar las dependencias del proyecto definidas en composer.json
                 sh 'composer install'
             }
         }
@@ -48,13 +49,13 @@ pipeline {
                 echo 'Configurando Apache para servir el proyecto...'
                 sh '''
                 # Configurar Apache para servir el proyecto desde /var/www/html
-                 rm -rf /var/www/html/*
-                 cp -r * /var/www/html/
+                sudo rm -rf /var/www/html/*
+                sudo cp -r * /var/www/html/
 
                 # Dar permisos correctos a los archivos y reiniciar Apache
-                 chown -R www-data:www-data /var/www/html/
-                 chmod -R 755 /var/www/html/
-                 service apache2 restart
+                sudo chown -R www-data:www-data /var/www/html/
+                sudo chmod -R 755 /var/www/html/
+                sudo service apache2 restart
                 '''
             }
         }
@@ -75,6 +76,8 @@ pipeline {
         stage('Pruebas con Selenium') {
             steps {
                 echo 'Ejecutando pruebas automatizadas con Selenium...'
+
+                // Crear entorno virtual de Python, instalar dependencias y ejecutar las pruebas
                 sh '''
                 python3 -m venv venv
                 source venv/bin/activate
@@ -87,6 +90,7 @@ pipeline {
         stage('Generar Informes') {
             steps {
                 echo 'Generando informes de pruebas...'
+                // Generar informes automáticos y almacenarlos en Jenkins
                 sh '''
                 mkdir -p reports
                 pytest --junitxml=reports/report.xml
@@ -94,6 +98,7 @@ pipeline {
             }
             post {
                 always {
+                    // Publicar los informes generados en Jenkins
                     junit 'reports/report.xml'
                 }
             }
@@ -102,6 +107,7 @@ pipeline {
         stage('Despliegue') {
             steps {
                 echo 'Desplegando aplicación...'
+                // Aquí puedes agregar comandos de despliegue si es necesario
             }
         }
     }
@@ -115,10 +121,9 @@ pipeline {
         }
         failure {
             echo 'El pipeline falló.'
-            // Comentando el envío de correo hasta que el SMTP esté configurado
-            // mail to: 'desarrolladores@empresa.com',
-            //      subject: 'Error en el Pipeline Jenkins',
-            //      body: "El pipeline ha fallado. Verifica los errores en ${env.BUILD_URL}."
+            mail to: 'desarrolladores@empresa.com',
+                 subject: 'Error en el Pipeline Jenkins',
+                 body: "El pipeline ha fallado. Verifica los errores en ${env.BUILD_URL}."
         }
     }
 }
