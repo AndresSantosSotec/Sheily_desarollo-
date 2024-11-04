@@ -1,5 +1,6 @@
 <?php
 require('../fpdf186/fpdf.php');
+//include './Backend/conexion_bd.php';
 
 class PDF extends FPDF
 {
@@ -83,7 +84,11 @@ $entreNosotros = "
 
             Entre Nosotros
                     
-                    a) $Corpo_nombre, de $Corpor_edad, casado, empresario, guatemalteco, de este domicilio, quien se identifica con Documento Personal de Identificación (DPI) con Código Único de Identificación (CUI) un mil seiscientos treinta y seis, ochenta y ocho mil seiscientos noventa y nueve, un mil seiscientos ocho ($Dpi_corpo) extendido por el Registro Nacional de las Personas de la República de Guatemala, en el municipio de $Muni_corpo, del departamento de $Dep_corpo, quien comparece en su calidad de ADMINISTRADOR ÚNICO Y REPRESENTANTE LEGAL de la entidad CORPOSISTEMAS, SOCIEDAD ANONIMA, en lo sucesivo CORPOSISTEMAS calidad que acredita con el Acta Notarial de su nombramiento autorizada en esta ciudad el día tres de julio del dos mil veinte por el Notario MANUEL ANTONIO LÓPEZ OLIVA, el cual se encuentra debidamente inscrito en el Registro Mercantil General de la República bajo el número de Registro seiscientos mil doscientos dos (600202) folio doscientos quince (215) del Libro setecientos cincuenta y uno (751) de Auxiliares de Comercio.
+        a) $Corpo_nombre, de $Corpor_edad, casado, empresario, guatemalteco, de este domicilio, quien se identifica con Documento Personal de Identificación (DPI) con Código Único de Identificación (CUI) un mil seiscientos treinta y seis, ochenta y ocho mil seiscientos noventa y nueve, un mil seiscientos ocho ($Dpi_corpo) extendido por el Registro Nacional de las Personas de la República de Guatemala, en el municipio de $Muni_corpo, del departamento de $Dep_corpo, quien comparece en su calidad de ADMINISTRADOR ÚNICO Y REPRESENTANTE LEGAL de la entidad CORPOSISTEMAS, SOCIEDAD ANONIMA, en lo sucesivo CORPOSISTEMAS calidad que acredita con el Acta Notarial de su nombramiento autorizada en esta ciudad el día tres de julio del dos mil veinte por el Notario MANUEL ANTONIO LÓPEZ OLIVA, el cual se encuentra debidamente inscrito en el Registro Mercantil General de la República bajo el número de Registro seiscientos mil doscientos dos (600202) folio doscientos quince (215) del Libro setecientos cincuenta y uno (751) de Auxiliares de Comercio.
+
+        b)
+
+        C)
 ";
 
 // Secciones en negrita
