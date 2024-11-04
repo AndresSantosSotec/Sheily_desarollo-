@@ -21,17 +21,17 @@ pipeline {
                 echo 'Instalando Apache y dependencias PHP...'
                 sh '''
                 # Instalar Apache si no está instalado
-                sudo apt-get update
-                sudo apt-get install -y apache2
+                 apt-get update
+                 apt-get install -y apache2
 
                 # Instalar PHP y módulos necesarios
-                sudo apt-get install -y php libapache2-mod-php php-mysql
+                 apt-get install -y php libapache2-mod-php php-mysql
 
                 # Asegurarse de que Composer esté instalado
-                sudo apt-get install -y composer
+                 apt-get install -y composer
 
                 # Reiniciar Apache para asegurarse de que todo esté configurado correctamente
-                sudo service apache2 restart
+                 service apache2 restart
                 '''
             }
         }
@@ -48,13 +48,13 @@ pipeline {
                 echo 'Configurando Apache para servir el proyecto...'
                 sh '''
                 # Configurar Apache para servir el proyecto desde /var/www/html
-                sudo rm -rf /var/www/html/*
-                sudo cp -r * /var/www/html/
+                 rm -rf /var/www/html/*
+                 cp -r * /var/www/html/
 
                 # Dar permisos correctos a los archivos y reiniciar Apache
-                sudo chown -R www-data:www-data /var/www/html/
-                sudo chmod -R 755 /var/www/html/
-                sudo service apache2 restart
+                 chown -R www-data:www-data /var/www/html/
+                 chmod -R 755 /var/www/html/
+                 service apache2 restart
                 '''
             }
         }
