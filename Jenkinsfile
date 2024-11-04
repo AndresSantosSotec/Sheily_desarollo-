@@ -4,7 +4,7 @@ pipeline {
     environment {
         DB_HOST = 'localhost'
         DB_USER = 'root'
-        DB_PASSWORD = ''  // Agrega la contraseña si es necesaria
+        DB_PASSWORD = ''
         DB_NAME = 'corposystemas_bd'
     }
 
@@ -12,7 +12,7 @@ pipeline {
         stage('Clonar repositorio') {
             steps {
                 echo 'Clonando repositorio desde GitHub...'
-                git 'https://github.com/AndresSantosSotec/Sheily_desarollo-.git'
+                git branch: 'main', url: 'https://github.com/AndresSantosSotec/Sheily_desarollo-.git'
             }
         }
 
@@ -39,7 +39,6 @@ pipeline {
         stage('Instalar dependencias del proyecto') {
             steps {
                 echo 'Instalando dependencias del proyecto PHP...'
-                // Instalar las dependencias del proyecto definidas en composer.json
                 sh 'composer install'
             }
         }
@@ -76,8 +75,6 @@ pipeline {
         stage('Pruebas con Selenium') {
             steps {
                 echo 'Ejecutando pruebas automatizadas con Selenium...'
-
-                // Crear entorno virtual de Python, instalar dependencias y ejecutar las pruebas
                 sh '''
                 python3 -m venv venv
                 source venv/bin/activate
@@ -90,7 +87,6 @@ pipeline {
         stage('Generar Informes') {
             steps {
                 echo 'Generando informes de pruebas...'
-                // Generar informes automáticos y almacenarlos en Jenkins
                 sh '''
                 mkdir -p reports
                 pytest --junitxml=reports/report.xml
@@ -98,7 +94,6 @@ pipeline {
             }
             post {
                 always {
-                    // Publicar los informes generados en Jenkins
                     junit 'reports/report.xml'
                 }
             }
@@ -107,7 +102,6 @@ pipeline {
         stage('Despliegue') {
             steps {
                 echo 'Desplegando aplicación...'
-                // Aquí puedes agregar comandos de despliegue si es necesario
             }
         }
     }
@@ -121,9 +115,10 @@ pipeline {
         }
         failure {
             echo 'El pipeline falló.'
-            mail to: 'desarrolladores@empresa.com',
-                 subject: 'Error en el Pipeline Jenkins',
-                 body: "El pipeline ha fallado. Verifica los errores en ${env.BUILD_URL}."
+            // Comentando el envío de correo hasta que el SMTP esté configurado
+            // mail to: 'desarrolladores@empresa.com',
+            //      subject: 'Error en el Pipeline Jenkins',
+            //      body: "El pipeline ha fallado. Verifica los errores en ${env.BUILD_URL}."
         }
     }
 }
