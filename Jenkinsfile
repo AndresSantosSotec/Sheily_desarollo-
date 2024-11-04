@@ -21,14 +21,14 @@ pipeline {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     echo 'Instalando Apache y dependencias PHP...'
                     sh '''
-                    sudo apt-get update
-                    sudo apt-get install -y apache2
-                    sudo apt-get install -y php libapache2-mod-php php-mysql
-                    if ! [ -x "$(command -v composer)" ]; then
-                      sudo apt-get install -y composer
-                    fi
-                    sudo service apache2 restart
-                    '''
+            sudo apt-get update
+            sudo apt-get install -y apache2
+            sudo apt-get install -y php libapache2-mod-php php-mysql php-gd  # Se añadió php-gd aquí
+            if ! [ -x "$(command -v composer)" ]; then
+              sudo apt-get install -y composer
+            fi
+            sudo service apache2 restart
+            '''
                 }
             }
         }
@@ -95,7 +95,7 @@ pipeline {
         stage('Despliegue') {
             steps {
                 echo 'Desplegando aplicación...'
-                // Aquí puedes agregar comandos de despliegue si es necesario
+            // Aquí puedes agregar comandos de despliegue si es necesario
             }
         }
     }
@@ -109,9 +109,9 @@ pipeline {
         }
         failure {
             echo 'El pipeline falló.'
-            // mail to: 'desarrolladores@empresa.com',
-            //      subject: 'Error en el Pipeline Jenkins',
-            //      body: "El pipeline ha fallado. Verifica los errores en ${env.BUILD_URL}."
+        // mail to: 'desarrolladores@empresa.com',
+        //      subject: 'Error en el Pipeline Jenkins',
+        //      body: "El pipeline ha fallado. Verifica los errores en ${env.BUILD_URL}."
         }
     }
 }
