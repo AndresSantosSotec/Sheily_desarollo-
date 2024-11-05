@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/tu-usuario/tu-repo.git'  // Reemplaza con la URL de tu repositorio
+        REPO_URL = 'https://github.com/AndresSantosSotec/Sheily_desarollo-.git'  // Reemplaza con la URL de tu repositorio
     }
 
     stages {
         stage('Clonar repositorio') {
             steps {
                 // Clonar el repositorio desde GitHub
-                git url: "${REPO_URL}", branch: 'main'  // Cambia 'main' por la rama que desees clonar
+                git url: "${REPO_URL}", branch: 'rama_juan'  // Cambia 'main' por la rama que desees clonar
             }
         }
 
@@ -39,7 +39,7 @@ pipeline {
         stage('Ejecutar pruebas Selenium') {
             steps {
                 // Ejecutar las pruebas de Selenium que están en el archivo 'pruebas_selenium.py'
-                sh 'python3 pruebas_selenium.py'
+                sh 'python3 ./prueba_jenkins.py'
             }
         }
     }
