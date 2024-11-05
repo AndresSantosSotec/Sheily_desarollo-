@@ -29,12 +29,13 @@ pipeline {
                 # Instalar selenium en el entorno virtual
                 pip install selenium
 
-                # Instalar Google Chrome y ChromeDriver
+                # Instalar Google Chrome
                 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
                 sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
-                CHROME_VERSION=$(google-chrome --version | grep -oP '\\d+\\.\\d+\\.\\d+' | head -1)
-                wget https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip
+                # Fijar la versión de ChromeDriver compatible (usar la 117.0.5938.88)
+                CHROME_DRIVER_VERSION="117.0.5938.88"
+                wget https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
                 unzip chromedriver_linux64.zip
                 sudo mv chromedriver /usr/local/bin/
                 sudo chmod +x /usr/local/bin/chromedriver
