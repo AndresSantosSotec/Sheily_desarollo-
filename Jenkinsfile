@@ -47,7 +47,7 @@ pipeline {
                 // Ejecutar las pruebas de Selenium que están en el archivo 'pruebas_selenium.py' usando Firefox
                 sh '''
                 . venv/bin/activate
-                python3 ./prueba_jenkins.py
+                python3 prueba_jenkins.py
                 '''
             }
         }
