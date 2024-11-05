@@ -20,6 +20,16 @@ pipeline {
                 sudo apt-get update
                 sudo apt-get install -y python3-pip python3-venv
 
+                # Instalar Firefox
+                sudo apt-get install -y firefox
+
+                # Instalar Geckodriver (controlador para Firefox)
+                GECKODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "tag_name" | cut -d '"' -f 4)
+                wget https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
+                tar -xvzf geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
+                sudo mv geckodriver /usr/local/bin/
+                sudo chmod +x /usr/local/bin/geckodriver
+
                 # Crear entorno virtual
                 python3 -m venv venv
 
@@ -28,24 +38,13 @@ pipeline {
 
                 # Instalar selenium en el entorno virtual
                 pip install selenium
-
-                # Instalar Google Chrome
-                wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-                sudo apt install -y ./google-chrome-stable_current_amd64.deb
-
-                # Fijar la versión de ChromeDriver compatible (usar la 117.0.5938.88)
-                CHROME_DRIVER_VERSION="117.0.5938.88"
-                wget https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
-                unzip chromedriver_linux64.zip
-                sudo mv chromedriver /usr/local/bin/
-                sudo chmod +x /usr/local/bin/chromedriver
                 '''
             }
         }
 
         stage('Ejecutar pruebas Selenium') {
             steps {
-                // Ejecutar las pruebas de Selenium que están en el archivo 'pruebas_selenium.py' usando el entorno virtual
+                // Ejecutar las pruebas de Selenium que están en el archivo 'pruebas_selenium.py' usando Firefox
                 sh '''
                 . venv/bin/activate
                 python3 ./prueba_jenkins.py
