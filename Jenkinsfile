@@ -23,8 +23,8 @@ pipeline {
                 # Crear entorno virtual
                 python3 -m venv venv
 
-                # Activar el entorno virtual
-                source venv/bin/activate
+                # Activar el entorno virtual usando '.'
+                . venv/bin/activate
 
                 # Instalar selenium en el entorno virtual
                 pip install selenium
@@ -46,7 +46,7 @@ pipeline {
             steps {
                 // Ejecutar las pruebas de Selenium que están en el archivo 'pruebas_selenium.py' usando el entorno virtual
                 sh '''
-                source venv/bin/activate
+                . venv/bin/activate
                 python3 ./prueba_jenkins.py
                 '''
             }
