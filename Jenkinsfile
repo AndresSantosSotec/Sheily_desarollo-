@@ -2,118 +2,59 @@ pipeline {
     agent any
 
     environment {
-        DB_HOST = 'localhost'
-        DB_USER = 'root'
-        DB_PASSWORD = ''  // Agrega la contraseña si es necesaria
-        DB_NAME = 'corposystemas_bd'
+        REPO_URL = 'https://github.com/tu-usuario/tu-repo.git'  // Reemplaza con la URL de tu repositorio
     }
 
     stages {
         stage('Clonar repositorio') {
             steps {
-                echo 'Clonando repositorio desde GitHub...'
-                git branch: 'main', url: 'https://github.com/AndresSantosSotec/Sheily_desarollo-.git'
+                // Clonar el repositorio desde GitHub
+                git url: "${REPO_URL}", branch: 'main'  // Cambia 'main' por la rama que desees clonar
             }
         }
 
-        stage('Instalar Apache y dependencias PHP') {
+        stage('Preparar entorno') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    echo 'Instalando Apache, MySQL y dependencias PHP...'
-                    sh '''
-                    sudo apt-get update
-                    sudo apt-get install -y apache2
-                    sudo apt-get install -y php libapache2-mod-php php-mysql php-gd
-                    sudo apt-get install -y mysql-server
-                    sudo service mysql start
-                    if ! [ -x "$(command -v composer)" ]; then
-                      sudo apt-get install -y composer
-                    fi
-                    sudo service apache2 restart
-                    '''
-                }
-            }
-        }
-
-        stage('Instalar dependencias del proyecto') {
-            steps {
-                echo 'Instalando dependencias del proyecto PHP...'
-                sh 'composer install'
-            }
-        }
-
-        stage('Configurar Apache y permisos de proyecto') {
-            steps {
-                echo 'Configurando Apache para servir el proyecto...'
+                // Instalar dependencias necesarias
                 sh '''
-                sudo rm -rf /var/www/html/*
-                sudo cp -r * /var/www/html/
-                sudo chown -R www-data:www-data /var/www/html/
-                sudo chmod -R 755 /var/www/html/
-                sudo service apache2 restart
+                sudo apt-get update
+                sudo apt-get install -y python3-pip
+                sudo pip3 install selenium
+                '''
+                
+                // Instalar Google Chrome y ChromeDriver para usar Selenium en modo headless
+                sh '''
+                wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+                sudo apt install -y ./google-chrome-stable_current_amd64.deb
+                
+                CHROME_VERSION=$(google-chrome --version | grep -oP '\\d+\\.\\d+\\.\\d+' | head -1)
+                wget https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip
+                unzip chromedriver_linux64.zip
+                sudo mv chromedriver /usr/local/bin/
+                sudo chmod +x /usr/local/bin/chromedriver
                 '''
             }
         }
 
-        stage('Configurar Base de Datos') {
+        stage('Ejecutar pruebas Selenium') {
             steps {
-                echo 'Cargando la base de datos corposystemas_bd...'
-                sh '''
-                mysql -h ${DB_HOST} -u ${DB_USER} -p${DB_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
-                mysql -h ${DB_HOST} -u ${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < corposystemas_bd.sql
-                '''
-            }
-        }
-
-        stage('Pruebas con Selenium') {
-            steps {
-                echo 'Ejecutando pruebas automatizadas con Selenium...'
-                sh '''
-                Xvfb :99 &
-                export DISPLAY=:99
-                python3 -m venv venv
-                source venv/bin/activate
-                pip install -r requirements.txt
-                python3 -m unittest discover Caja_negra
-                '''
-            }
-        }
-
-        stage('Generar Informes') {
-            steps {
-                echo 'Generando informes de pruebas...'
-                sh '''
-                mkdir -p reports
-                pytest --junitxml=reports/report.xml
-                '''
-            }
-            post {
-                always {
-                    junit 'reports/report.xml'
-                }
-            }
-        }
-
-        stage('Despliegue') {
-            steps {
-                echo 'Desplegando aplicación...'
-                // Aquí puedes agregar comandos de despliegue si es necesario
+                // Ejecutar las pruebas de Selenium que están en el archivo 'pruebas_selenium.py'
+                sh 'python3 pruebas_selenium.py'
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline completado.'
-        }
-        success {
-            echo 'El pipeline se ejecutó exitosamente.'
+            // Publicar los artefactos si hay algún resultado de pruebas
+            archiveArtifacts artifacts: '**/reports/*.html', allowEmptyArchive: true
+
+            // Limpiar el workspace después de cada ejecución
+            cleanWs()
         }
         failure {
-            echo 'El pipeline falló.'
-            // mail to: 'desarrolladores@empresa.com',
-            //      subject: 'Error en el Pipeline Jenkins',
-            //      body: "El pipeline ha fallado. Verifica los errores en ${env.BUILD_URL}."
+            // Enviar notificaciones en caso de que falle el pipeline
+            echo 'Las pruebas fallaron.'
         }
     }
 }
