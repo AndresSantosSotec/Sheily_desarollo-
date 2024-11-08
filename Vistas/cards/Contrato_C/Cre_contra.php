@@ -20,9 +20,9 @@
                     <!-- Datos del Emisor -->
                     <h4 class="mb-3">Datos del Emisor</h4>
                     <div class="col-md-3 mb-3">
-                            <label for="edadCorpo" class="form-label">Edad:</label>
-                            <input type="number" class="form-control" id="edadCorpo" name="edadCorpo" required>
-                        </div>
+                        <label for="edadCorpo" class="form-label">Edad:</label>
+                        <input type="number" class="form-control" id="edadCorpo" name="edadCorpo" required>
+                    </div>
                     <h4 class="mb-3">Datos del Emisor</h4>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -72,6 +72,10 @@
                             <label for="notarioEmisor" class="form-label">Notario:</label>
                             <input type="text" class="form-control" id="notarioEmisor" name="notarioEmisor" required>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaAcreditaEmisor" class="form-label">Fecha Acreditación Emisor:</label>
+                            <input type="date" class="form-control" id="fechaAcreditaEmisor" name="fechaAcreditaEmisor" required>
+                        </div>
                         <div class="col-md-4 mb-3">
                             <label for="registroMercantilEmisor" class="form-label">No. Registro Mercantil:</label>
                             <input type="number" class="form-control" id="registroMercantilEmisor" name="registroMercantilEmisor" required>
@@ -83,6 +87,10 @@
                         <div class="col-md-4 mb-3">
                             <label for="libroEmisor" class="form-label">Libro:</label>
                             <input type="number" class="form-control" id="libroEmisor" name="libroEmisor" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="direccionEmisor" class="form-label">Dirección del Emisor:</label>
+                            <input type="text" class="form-control" id="direccionEmisor" name="direccionEmisor" required>
                         </div>
                     </div>
 
@@ -136,6 +144,10 @@
                             <label for="notarioDistribuidor" class="form-label">Notario:</label>
                             <input type="text" class="form-control" id="notarioDistribuidor" name="notarioDistribuidor" required>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechaAcreditaDistribuidor" class="form-label">Fecha Acreditación Distribuidor:</label>
+                            <input type="date" class="form-control" id="fechaAcreditaDistribuidor" name="fechaAcreditaDistribuidor" required>
+                        </div>
                         <div class="col-md-4 mb-3">
                             <label for="registroMercantilDistribuidor" class="form-label">No. Registro Mercantil:</label>
                             <input type="number" class="form-control" id="registroMercantilDistribuidor" name="registroMercantilDistribuidor" required>
@@ -160,7 +172,10 @@
                             <label for="fechaVigencia" class="form-label">Fecha de Vigencia:</label>
                             <input type="date" class="form-control" id="fechaVigencia" name="fechaVigencia" required>
                         </div>
-
+                        <div class="col-md-6 mb-3">
+                            <label for="direccionDistribuidor" class="form-label">Dirección del Distribuidor:</label>
+                            <input type="text" class="form-control" id="direccionDistribuidor" name="direccionDistribuidor" required>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100 mt-4">Crear Contrato</button>
                 </form>
