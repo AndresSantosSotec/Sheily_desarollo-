@@ -1,0 +1,85 @@
+
+        .content {
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+
+        .table thead {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.3rem;
+            font-size: 0.8rem;
+            vertical-align: middle;
+        }
+
+        .card {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            padding: 0.4rem;
+            font-size: 0.9rem;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 1rem;
+        }
+
+        .card-body {
+            padding: 0.4rem;
+        }
+
+        /* Ajustar la columna de acciones */
+        .acciones-btn {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        /* Estilos adicionales para el sidebar */
+        #sidebar {
+            width: 200px;
+            position: fixed;
+            height: 100%;
+            background-color: #343a40;
+            color: white;
+            overflow-y: auto;
+            padding-top: 1rem;
+        }
+
+        #sidebar .sidebar-link {
+            color: #ffffff;
+            display: block;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        #sidebar .sidebar-link:hover {
+            background-color: #007bff;
+        }
