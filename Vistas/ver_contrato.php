@@ -53,13 +53,13 @@ echo "<script>
 
             switch (tipoContrato) {
                 case 'A':
-                    window.location.href = 'http://localhost/proyectos%204/Sheily/Docs/Documentos/repoA.php?id_contrato=' + idContrato;
+                    window.location.href = '../Docs/Documentos/repoA.php?id_contrato=' + idContrato;
                     break;
                 case 'B':
-                    window.location.href = 'http://localhost/proyectos%204/Sheily/Docs/Documentos/repoB.php?id_contrato=' + idContrato;
+                    window.location.href = '../Docs/Documentos/repoB.php?id_contrato=' + idContrato;
                     break;
                 case 'C':
-                    window.location.href = 'http://localhost/proyectos%204/Sheily/Docs/Documentos/repoC.php?id_contrato=' + idContrato;
+                    window.location.href = '../Docs/Documentos/repoC.php?id_contrato=' + idContrato;
                     break;
                 default:
                     Swal.fire({
