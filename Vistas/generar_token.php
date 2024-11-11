@@ -25,7 +25,7 @@ $stmt->execute([
 ]);
 
 // Generar enlace
-$enlace = "http://localhost/tu_proyecto/ver_contrato.php?token=$token";
+$enlace = "http://localhost/proyectos%204/Sheily/Vistas/ver_contrato.php?token=$token";
 
 // Devolver el enlace en formato JSON para ser usado en SweetAlert
 echo json_encode(['status' => 'success', 'enlace' => $enlace]);

@@ -9,12 +9,14 @@ if (!$token) {
 }
 
 // Consultar el token en la base de datos
-$query = "SELECT * FROM contrato_tokens WHERE token = :token AND usado = 0";
+$query = "SELECT * FROM contrato_tokens WHERE token = :token";
 $stmt = $pdo->prepare($query);
 $stmt->execute([':token' => $token]);
 $tokenData = $stmt->fetch();
 
-if (!$tokenData || new DateTime() > new DateTime($tokenData['fecha_expiracion'])) {
+// Verificar si el token existe, no ha sido usado y no ha expirado
+if (!$tokenData || $tokenData['usado'] == 1 || new DateTime() > new DateTime($tokenData['fecha_expiracion'])) {
+    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
     echo "<script>
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
@@ -30,7 +32,7 @@ if (!$tokenData || new DateTime() > new DateTime($tokenData['fecha_expiracion'])
     exit;
 }
 
-// Marcar el token como usado para que el enlace expire
+// Marcar el token como usado para que el enlace expire después de abrirlo
 $updateTokenQuery = "UPDATE contrato_tokens SET usado = 1 WHERE token = :token";
 $updateTokenStmt = $pdo->prepare($updateTokenQuery);
 $updateTokenStmt->execute([':token' => $token]);
@@ -51,13 +53,13 @@ echo "<script>
 
             switch (tipoContrato) {
                 case 'A':
-                    window.location.href = 'repoA.php?id_contrato=' + idContrato;
+                    window.location.href = 'http://localhost/proyectos%204/Sheily/Docs/Documentos/repoA.php?id_contrato=' + idContrato;
                     break;
                 case 'B':
-                    window.location.href = 'repoB.php?id_contrato=' + idContrato;
+                    window.location.href = 'http://localhost/proyectos%204/Sheily/Docs/Documentos/repoB.php?id_contrato=' + idContrato;
                     break;
                 case 'C':
-                    window.location.href = 'repoC.php?id_contrato=' + idContrato;
+                    window.location.href = 'http://localhost/proyectos%204/Sheily/Docs/Documentos/repoC.php?id_contrato=' + idContrato;
                     break;
                 default:
                     Swal.fire({
