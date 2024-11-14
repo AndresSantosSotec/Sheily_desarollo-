@@ -1,7 +1,7 @@
 <?php
 require_once '../Backend/conexion_bd.php';
 
-// Obtener ID de contrato y tipo de contrato desde POST
+// Validar que los datos necesarios están presentes
 $id_contrato = $_POST['id_contrato'] ?? null;
 $tipo_contrato = $_POST['tipo_contrato'] ?? null;
 
@@ -10,27 +10,21 @@ if (!$id_contrato || !$tipo_contrato) {
     exit;
 }
 
-// Generar un token único y definir una fecha de expiración (por ejemplo, en 1 hora)
+// Generar un token único y fecha de expiración
 $token = bin2hex(random_bytes(16));
 $fecha_expiracion = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-// Guardar el token en la base de datos
-$query = "INSERT INTO contrato_tokens (id_contrato, tipo_contrato, token, fecha_expiracion, usado) VALUES (:id_contrato, :tipo_contrato, :token, :fecha_expiracion, 0)";
+// Insertar el token en la base de datos
+$query = "INSERT INTO contrato_tokens (id_contrato, tipo_contrato, token, fecha_expiracion, usado) 
+          VALUES (:id_contrato, :tipo_contrato, :token, :fecha_expiracion, 0)";
 $stmt = $pdo->prepare($query);
-$stmt->execute([
-    ':id_contrato' => $id_contrato,
-    ':tipo_contrato' => $tipo_contrato,
-    ':token' => $token,
-    ':fecha_expiracion' => $fecha_expiracion
-]);
+$stmt->execute(compact('id_contrato', 'tipo_contrato', 'token', 'fecha_expiracion'));
 
-// Generar enlace dinámico adaptado a cualquier servidor y ruta de base
+// Crear enlace dinámico adaptable al servidor y estructura de carpetas
 $protocolo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
-$host = $_SERVER['HTTP_HOST'];
-// Obtener la URL base desde la ruta del script actual para evitar dependencias específicas de la estructura
-$baseUrl = $protocolo . '://' . $host . rtrim(dirname($_SERVER['PHP_SELF'], 2), '/');
+$baseUrl = $protocolo . '://' . $_SERVER['HTTP_HOST'] . dirname(dirname($_SERVER['PHP_SELF']));
 $enlace = "{$baseUrl}/Vistas/ver_contrato.php?token=$token";
 
-// Devolver el enlace en formato JSON para ser usado en SweetAlert
+// Enviar respuesta en JSON
 echo json_encode(['status' => 'success', 'enlace' => $enlace]);
 ?>
