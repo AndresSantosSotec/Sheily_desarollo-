@@ -3,7 +3,7 @@
 $db_host = 'localhost';
 $db_name = 'corposystemas_bd';
 $db_username = 'root';
-$db_password = ''; 
+$db_password = '';
 
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_username, $db_password);
@@ -49,27 +49,27 @@ try {
                 if ($result->rowCount() > 0) {
                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                         echo '<tr>
-                            <td>' . $row['id_contrato'] . '</td>
-                            <td>' . $row['nombre_distribuidor'] . '</td>
-                            <td>' . $row['entidad'] . '</td>
-                            <td>' . $row['tipo_documento'] . '</td>
-                            <td>' . $row['nit'] . '</td>
-                            <td>' . $row['fecha_inicio'] . '</td>
-                            <td>' . $row['fecha_fin'] . '</td>
-                            <td class="d-flex justify-content-between">
-                                    <a href="../Docs/Documentos/repoB.php?id_contrato=' . $row['id_contrato'] . '" 
-                                       class="btn btn-sm btn-info" title="Descargar" target="_blank">
-                                        <i class="fas fa-download"></i>
-                                    </a>
-                                <button class="btn btn-sm btn-warning me-1" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger" 
-                                    onclick="eliminarContrato(' . $row['id_contrato'] . ', \'B\')">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </td>
-                        </tr>';
+    <td>' . $row['id_contrato'] . '</td>
+    <td>' . $row['nombre_distribuidor'] . '</td>
+    <td>' . $row['entidad'] . '</td>
+    <td>' . $row['tipo_documento'] . '</td>
+    <td>' . $row['nit'] . '</td>
+    <td>' . $row['fecha_inicio'] . '</td>
+    <td>' . $row['fecha_fin'] . '</td>
+    <td class="d-flex justify-content-between">
+        <a href="../Docs/Documentos/repoB.php?id_contrato=' . $row['id_contrato'] . '" 
+           class="btn btn-sm btn-info" title="Descargar" target="_blank">
+            <i class="fas fa-download"></i>
+        </a>
+        <button class="btn btn-sm btn-warning me-1 btn-editar" data-id="' . $row['id_contrato'] . '" title="Editar">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn btn-sm btn-danger" 
+            onclick="eliminarContrato(' . $row['id_contrato'] . ', \'B\')">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </td>
+</tr>';
                     }
                 } else {
                     echo '<tr><td colspan="8" class="text-center">No se encontraron contratos.</td></tr>';
@@ -80,7 +80,65 @@ try {
     </div>
 </div>
 
+<div id="edit-container" class="container mt-4"></div>
+
+
+
 <script>
+  $(document).on('click', '.btn-editar', function() {
+    const idContrato = $(this).data('id');
+    $.ajax({
+        url: '../Backend/obtener_contratosB.php',
+        type: 'GET',
+        data: { id_contrato: idContrato },
+        success: function(response) {
+            $('#edit-container').html(response);
+        },
+        error: function(xhr) {
+            console.error('Error al cargar el formulario de edición:', xhr.responseText);
+            Swal.fire('Error', 'Hubo un problema al cargar el formulario de edición.', 'error');
+        }
+    });
+});
+
+    //edicion de los contratos 
+    $(document).on('submit', '#editFormB', function(e) {
+        e.preventDefault();
+        const formData = $(this).serialize();
+
+        $.ajax({
+            url: '../Backend/editB.php',
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                try {
+                    const result = typeof response === 'object' ? response : JSON.parse(response);
+
+                    if (result.status === 'success') {
+                        Swal.fire({
+                            title: 'Guardado',
+                            text: 'El contrato ha sido actualizado correctamente.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload(); // Recargar la página después de cerrar el diálogo de éxito
+                        });
+                    } else {
+                        Swal.fire('Error', result.message || 'No se pudo actualizar el contrato.', 'error');
+                    }
+                } catch (e) {
+                    console.error("JSON Parse Error:", e, response);
+                    Swal.fire('Error', 'Error inesperado en el servidor. La respuesta no es JSON válido.', 'error');
+                }
+            },
+            error: function(xhr) {
+                Swal.fire('Error', 'Ocurrió un error al guardar los cambios.', 'error');
+                console.error('Error en la actualización:', xhr.responseText);
+            }
+        });
+    });
+
+
     // Función para eliminar un contrato tipo B utilizando AJAX y SweetAlert
     function eliminarContrato(id, tipo) {
         Swal.fire({
@@ -97,7 +155,10 @@ try {
                 $.ajax({
                     url: '../Backend/eliminar_contrato.php',
                     type: 'POST',
-                    data: { id: id, tipo: tipo },
+                    data: {
+                        id: id,
+                        tipo: tipo
+                    },
                     success: function(response) {
                         Swal.fire(
                             'Eliminado',

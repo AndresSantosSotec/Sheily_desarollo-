@@ -61,9 +61,9 @@ try {
                                        class="btn btn-sm btn-info" title="Descargar" target="_blank">
                                         <i class="fas fa-download"></i>
                                     </a>
-                    <button class="btn btn-sm btn-warning me-1" 
+                    <button class="btn btn-sm btn-warning me-1 btn-editar" 
                             title="Editar" 
-                            onclick="mostrarFormularioEdicion(' . $row['id_contrato'] . ')">
+                            data-id="' . $row['id_contrato'] . '">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-sm btn-danger" 
@@ -82,15 +82,53 @@ try {
     </div>
 </div>
 
+<div id="contenido-principal"></div>
+
 <script>
-    // Manejo de la edición
+    function guardarCambiosContrato() {
+        const formData = new FormData(document.getElementById('editFormC'));
+
+        $.ajax({
+            url: '../Backend/editC.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    Swal.fire(
+                        'Éxito',
+                        response.message,
+                        'success'
+                    ).then(() => {
+                        location.reload(); // Recargar la página para actualizar la lista de contratos
+                    });
+                } else {
+                    Swal.fire(
+                        'Error',
+                        response.message,
+                        'error'
+                    );
+                }
+            },
+            error: function() {
+                Swal.fire(
+                    'Error',
+                    'Hubo un problema al actualizar el contrato.',
+                    'error'
+                );
+            }
+        });
+    }
+
     // Manejo de la edición
     $(document).on('click', '.btn-editar', function() {
         var idContrato = $(this).data('id'); // Obtener el ID del contrato
 
         // Cargar la vista de edición en el div "contenido-principal"
         $.ajax({
-            url: './cards/Contrato_C/Edit_ContraC.php', // Ruta ajustada
+            url: '../Backend/obtener_contratosC.php',
             type: 'GET',
             data: {
                 id_contrato: idContrato
