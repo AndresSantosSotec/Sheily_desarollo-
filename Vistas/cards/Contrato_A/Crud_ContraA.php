@@ -25,6 +25,11 @@ try {
 ?>
 
 <div class="card mt-3" style="max-width: 800px; margin: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <!-- Formulario de búsqueda -->
+    <div class="p-3">
+        <input type="text" id="searchInput" class="form-control" placeholder="Buscar por receptor, tarifa, rango o fecha...">
+    </div>
+
     <!-- Tabla de contratos -->
     <table class="table table-sm table-hover">
         <thead>
@@ -38,7 +43,7 @@ try {
                 <th>Acciones</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="table-body">
             <?php
             if ($result->rowCount() > 0) {
                 while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -70,6 +75,7 @@ try {
     </table>
 </div>
 
+
 <!-- Contenedor donde se cargará el formulario de edición -->
 <div id="edit-container" class="container mt-4"></div>
 
@@ -80,6 +86,22 @@ try {
 </div>
 
 <script>
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+    const searchValue = this.value.toLowerCase(); // Convierte el valor de búsqueda a minúsculas
+    const rows = document.querySelectorAll('#table-body tr'); // Selecciona todas las filas de la tabla
+
+    rows.forEach(row => {
+        const rowText = row.innerText.toLowerCase(); // Convierte el texto de cada fila a minúsculas
+
+        // Muestra la fila si incluye el valor de búsqueda, de lo contrario, ocúltala
+        if (rowText.includes(searchValue)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
     // Función para manejar el evento de agregar un nuevo registro
     function agregarRegistro() {
         window.location.href = './ContratoA.php';

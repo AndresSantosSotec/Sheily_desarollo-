@@ -31,6 +31,12 @@ try {
         <h6 class="mb-0">Listado de Contratos - Distribuidores</h6>
     </div>
     <div class="card-body p-4">
+        <!-- Campo de búsqueda -->
+        <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Buscar por distribuidor, entidad, tipo de documento, etc...">
+        </div>
+
+        <!-- Tabla de contratos -->
         <table class="table table-sm table-hover">
             <thead>
                 <tr>
@@ -44,32 +50,32 @@ try {
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="table-body">
                 <?php
                 if ($result->rowCount() > 0) {
                     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                         echo '<tr>
-    <td>' . $row['id_contrato'] . '</td>
-    <td>' . $row['nombre_distribuidor'] . '</td>
-    <td>' . $row['entidad'] . '</td>
-    <td>' . $row['tipo_documento'] . '</td>
-    <td>' . $row['nit'] . '</td>
-    <td>' . $row['fecha_inicio'] . '</td>
-    <td>' . $row['fecha_fin'] . '</td>
-    <td class="d-flex justify-content-between">
-        <a href="../Docs/Documentos/repoB.php?id_contrato=' . $row['id_contrato'] . '" 
-           class="btn btn-sm btn-info" title="Descargar" target="_blank">
-            <i class="fas fa-download"></i>
-        </a>
-        <button class="btn btn-sm btn-warning me-1 btn-editar" data-id="' . $row['id_contrato'] . '" title="Editar">
-            <i class="fas fa-edit"></i>
-        </button>
-        <button class="btn btn-sm btn-danger" 
-            onclick="eliminarContrato(' . $row['id_contrato'] . ', \'B\')">
-            <i class="fas fa-trash-alt"></i>
-        </button>
-    </td>
-</tr>';
+                            <td>' . $row['id_contrato'] . '</td>
+                            <td>' . $row['nombre_distribuidor'] . '</td>
+                            <td>' . $row['entidad'] . '</td>
+                            <td>' . $row['tipo_documento'] . '</td>
+                            <td>' . $row['nit'] . '</td>
+                            <td>' . $row['fecha_inicio'] . '</td>
+                            <td>' . $row['fecha_fin'] . '</td>
+                            <td class="d-flex justify-content-between">
+                                <a href="../Docs/Documentos/repoB.php?id_contrato=' . $row['id_contrato'] . '" 
+                                   class="btn btn-sm btn-info" title="Descargar" target="_blank">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                <button class="btn btn-sm btn-warning me-1 btn-editar" data-id="' . $row['id_contrato'] . '" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" 
+                                    onclick="eliminarContrato(' . $row['id_contrato'] . ', \'B\')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>';
                     }
                 } else {
                     echo '<tr><td colspan="8" class="text-center">No se encontraron contratos.</td></tr>';
@@ -80,26 +86,41 @@ try {
     </div>
 </div>
 
+
 <div id="edit-container" class="container mt-4"></div>
 
 
 
 <script>
-  $(document).on('click', '.btn-editar', function() {
-    const idContrato = $(this).data('id');
-    $.ajax({
-        url: '../Backend/obtener_contratosB.php',
-        type: 'GET',
-        data: { id_contrato: idContrato },
-        success: function(response) {
-            $('#edit-container').html(response);
-        },
-        error: function(xhr) {
-            console.error('Error al cargar el formulario de edición:', xhr.responseText);
-            Swal.fire('Error', 'Hubo un problema al cargar el formulario de edición.', 'error');
-        }
+    // Filtrar filas de la tabla en tiempo real
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        const searchValue = this.value.toLowerCase(); // Convertir el valor de búsqueda a minúsculas
+        const rows = document.querySelectorAll('#table-body tr'); // Seleccionar todas las filas de la tabla
+
+        rows.forEach(row => {
+            const rowText = row.innerText.toLowerCase(); // Convertir el texto de cada fila a minúsculas
+            // Mostrar la fila si incluye el valor de búsqueda; de lo contrario, ocultarla
+            row.style.display = rowText.includes(searchValue) ? '' : 'none';
+        });
     });
-});
+
+    $(document).on('click', '.btn-editar', function() {
+        const idContrato = $(this).data('id');
+        $.ajax({
+            url: '../Backend/obtener_contratosB.php',
+            type: 'GET',
+            data: {
+                id_contrato: idContrato
+            },
+            success: function(response) {
+                $('#edit-container').html(response);
+            },
+            error: function(xhr) {
+                console.error('Error al cargar el formulario de edición:', xhr.responseText);
+                Swal.fire('Error', 'Hubo un problema al cargar el formulario de edición.', 'error');
+            }
+        });
+    });
 
     //edicion de los contratos 
     $(document).on('submit', '#editFormB', function(e) {
