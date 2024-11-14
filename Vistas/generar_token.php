@@ -27,8 +27,9 @@ $stmt->execute([
 // Generar enlace dinámico adaptado a cualquier servidor y ruta de base
 $protocolo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
 $host = $_SERVER['HTTP_HOST'];
-$basePath = dirname($_SERVER['REQUEST_URI'], 2); // Ajusta la base de acuerdo a la estructura de carpetas
-$enlace = "{$protocolo}://{$host}{$basePath}/Vistas/ver_contrato.php?token=$token";
+// Obtener la URL base desde la ruta del script actual para evitar dependencias específicas de la estructura
+$baseUrl = $protocolo . '://' . $host . rtrim(dirname($_SERVER['PHP_SELF'], 2), '/');
+$enlace = "{$baseUrl}/Vistas/ver_contrato.php?token=$token";
 
 // Devolver el enlace en formato JSON para ser usado en SweetAlert
 echo json_encode(['status' => 'success', 'enlace' => $enlace]);
